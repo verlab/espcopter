@@ -1,0 +1,17 @@
+espcopterv1
+thorttle	thorttel	3	SLIDER	Y Axis	0	1.0	0.0
+rudder	rudder	3	SLIDER	X Axis	0	1.0	0.0
+elevator	elevator	3	SLIDER	Y Rotation	0	1.0	0.0
+aileron	aileron	3	SLIDER	X Rotation	0	1.0	0.0
+ltrt	ltrt	3	SLIDER	Z Axis	0	1.0	0.0
+x	x	1	BUTTON	Button 2	0	0.0	0.0
+y	y	1	BUTTON	Button 3	0	0.0	0.0
+a	a	1	BUTTON	Button 0	0	0.0	0.0
+b	b	1	BUTTON	Button 1	0	0.0	0.0
+star	star	1	BUTTON	Button 7	0	0.0	0.0
+back	back	1	BUTTON	Button 6	0	0.0	0.0
+lb	lb	1	BUTTON	Button 4	0	0.0	0.0
+rb	rb	1	BUTTON	Button 5	0	0.0	0.0
+rightclsn	rightclsn	1	BUTTON	Button 9	0	0.0	0.0
+leftclsn	leftclsn	1	BUTTON	Button 8	0	0.0	0.0
+hat	hat	2	HAT	cooliehat: Hat Switch	0	1.0	0.0

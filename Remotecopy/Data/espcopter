@@ -1,0 +1,17 @@
+espcopter
+throttle	throttle	3	SLIDER	Y Axis	0	1.0	0.0
+rudder	rudder	3	SLIDER	X Axis	0	1.0	0.0
+elevator	elevator	3	SLIDER	Z Rotation	0	1.0	0.0
+aileron	aileron	3	SLIDER	Z Axis	0	1.0	0.0
+star	star	1	BUTTON	Button 2	0	0.0	0.0
+square	square	1	BUTTON	Button 3	0	0.0	0.0
+trigon	trigon	1	BUTTON	Button 0	0	0.0	0.0
+oval	oval	1	BUTTON	Button 1	0	0.0	0.0
+R1	R1	1	BUTTON	Button 7	0	0.0	0.0
+R2	R2	1	BUTTON	Button 5	0	0.0	0.0
+L1	L1	1	BUTTON	Button 6	0	0.0	0.0
+L2	L2	1	BUTTON	Button 4	0	0.0	0.0
+BASE10	BASE10	1	BUTTON	Button 9	0	0.0	0.0
+BASE9	BASE9	1	BUTTON	Button 8	0	0.0	0.0
+keyLeft	keyLeft	1	BUTTON	Button 10	0	0.0	0.0
+keyRight	keyRight	1	BUTTON	Button 11	0	0.0	0.0
