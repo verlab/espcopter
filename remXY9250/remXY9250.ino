@@ -9,7 +9,7 @@
 #include "Parameter.h"
 #include <EEPROM.h>
 #include <Wire.h>
-#include "pid.h"
+#include "PID.h"
 #include "AHRS.h"
 
 #include "REMOTEXY.h"
