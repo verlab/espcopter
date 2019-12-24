@@ -1,5 +1,0 @@
-espcopterv2
-thorttel	thorttel	3	SLIDER	Y Axis	0	1.0	0.0
-rudder	rudder	3	SLIDER	X Axis	0	1.0	0.0
-elevator	elevator	3	SLIDER	Y Rotation	0	1.0	0.0
-aileron	aileron	3	SLIDER	X Rotation	0	1.0	0.0
