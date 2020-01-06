@@ -83,44 +83,43 @@ void AHRS::Initialize(int calAHRS)
   Serial.println(MEAN_GYRO[2]);
 }
 
-char* AHRS::showParameter(){
+String AHRS::showParameter(){
   char buf2 [200];
   sprintf(buf2, "\33[93m[Calibration] Destination: [%f, %f], MagOffsetMotor: [%f, %f], MagOffset: [%f, %f, %f], MeanGyro: [%f, %f, %f]  \33[0m", destination2[0], destination2[1], magOffsetMotorEpr[0], magOffsetMotorEpr[1], magOffset[0], magOffset[1], magOffset[2], MEAN_GYRO[0], MEAN_GYRO[1], MEAN_GYRO[2]);
-  return buf2;
+  return String(buf2);
 }
 
 void AHRS::loadParameter(){
   Serial.print("Read Eeprom...");
     if (EEPROM.read(4) == 1) {
-      MEAN_GYRO[0] = -EEPROM.read(1);
+      MEAN_GYRO[0] = (int32_t)-EEPROM.read(1);
     } else {
-      MEAN_GYRO[0] = EEPROM.read(1);
+      MEAN_GYRO[0] = (int32_t)EEPROM.read(1);
     }
     if (EEPROM.read(5) == 1) {
-      MEAN_GYRO[1] = -EEPROM.read(2);
+      MEAN_GYRO[1] = (int32_t)-EEPROM.read(2);
     } else {
-      MEAN_GYRO[1] = EEPROM.read(2);
+      MEAN_GYRO[1] = (int32_t)EEPROM.read(2);
     }
     if (EEPROM.read(6) == 1) {
-      MEAN_GYRO[2] = -EEPROM.read(3);
+      MEAN_GYRO[2] = (int32_t)-EEPROM.read(3);
     } else {
-      MEAN_GYRO[2] = EEPROM.read(3);
+      MEAN_GYRO[2] = (int32_t)EEPROM.read(3);
     }
 
 
-    magOffset[0] = word(EEPROM.read(10), EEPROM.read(11));
-    magOffset[1] = word(EEPROM.read(20), EEPROM.read(21));
-    magOffset[2] = word(EEPROM.read(30), EEPROM.read(31));
+    magOffset[0] = (int16_t) word(EEPROM.read(10), EEPROM.read(11));
+    magOffset[1] = (int16_t) word(EEPROM.read(20), EEPROM.read(21));
+    magOffset[2] = (int16_t) word(EEPROM.read(30), EEPROM.read(31));
 
-    magOffsetMotorEpr[0] = word(EEPROM.read(40), EEPROM.read(41));
-    magOffsetMotorEpr[1] = word(EEPROM.read(50), EEPROM.read(51));
+    magOffsetMotorEpr[0] = (int16_t) word(EEPROM.read(40), EEPROM.read(41));
+    magOffsetMotorEpr[1] = (int16_t) word(EEPROM.read(50), EEPROM.read(51));
 
-    magOffsetMotorEpr[2] = word(EEPROM.read(45), EEPROM.read(46));
-    magOffsetMotorEpr[3] = word(EEPROM.read(55), EEPROM.read(56));
+    magOffsetMotorEpr[2] = (int16_t) word(EEPROM.read(45), EEPROM.read(46));
+    magOffsetMotorEpr[3] = (int16_t) word(EEPROM.read(55), EEPROM.read(56));
 
-    destination2[0] = word(EEPROM.read(12), EEPROM.read(13)) / 100;
-
-    destination2[1] = word(EEPROM.read(14), EEPROM.read(15)) / 100;
+    destination2[0] = (float) word(EEPROM.read(12), EEPROM.read(13)) / 100;
+    destination2[1] = (float) word(EEPROM.read(14), EEPROM.read(15)) / 100;
   }
 
 void AHRS::calibration(){
@@ -423,7 +422,9 @@ void AHRS::magCorrection(uint16_t itinary) {
     Serial.print(" degreeY = ");
     Serial.print(degree[2]);
     Serial.print(", ");
-    Serial.println(degree[2]);
+    Serial.print(degree[2]);
+    Serial.print(", ");
+    Serial.println(magOffsetMotorCount);
     if ( magOffsetMotorCount < 200 && degree_[2] != degree[2] && degree_[1] != degree[1] ) {
       magOffsetMotorCount += 1;
       magOffsetMotor[0] += degree[1];
@@ -548,7 +549,7 @@ void AHRS::headingMag(float attitude_rate[3], float  input[3], float degree[4], 
   I2Cread(MAG_ADDRESS, 0x02, 1, &ST1);
 
   if (ST1 & 0x01) {
-    Serial.println("---- Mag i2c Works!");
+    //Serial.println("---- Mag i2c Works!");
     //analogWrite(greenLed, 1000);    
     uint8_t Mag[7];
     I2Cread(MAG_ADDRESS, 0x03, 7, Mag);

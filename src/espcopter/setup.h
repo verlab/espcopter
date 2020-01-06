@@ -297,42 +297,4 @@ void mainSetup() {
   yGOT.SetGain(0.0, 0.0, 1.3, 0.3 , 125.0);
   yGOT.SetLimit(4500, 1000, 6000); //
 
-
-
-
-
-  /*#ifdef bme280
-    if (bme280Control == 1) {
-      bmeSetup();
-    }
-    #endif*/
-
-/*#ifdef vl53l0x
-  if (vl5310xControl == 1) {
-    InitVL53L0X();
-  }
-#endif*/
-
-  /*#ifdef MULTI_RANGER
-    if (multiRangerControl == 1) {
-      multiRangerSetup();
-    }
-    #endif
-
-    #ifdef opticalFlow
-    if (opticalFlowControl) {
-      opticalSensorSetup();
-    }
-    #endif
-
-    #ifdef NeoPixel
-    NeoPixelsetup();
-    #endif
-
-    #ifdef lps
-    if (lpsControl == 1) {
-      lpsSetup();
-    }
-    #endif*/
-
 }

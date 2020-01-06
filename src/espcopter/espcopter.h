@@ -6,13 +6,6 @@
 #include "AHRS.h"
 #include "outputs.h"
 
-//#include "RemoteXY_Control.h"
-//#include "WEP_APP.h"
-//#include "NeoPixel.h"
-/*
-  #include "bme280.h"
-*/
-
 ESPCOPTER esp;
 
 PID oto;
@@ -38,11 +31,8 @@ PID roll;
 PID pitch;
 PID yaw;
 
-
-
-
 #include "autoOpt.h"
 #include "setup.h"
 #include "FlightControl.h"
-// #include "loop.h"
+
 
