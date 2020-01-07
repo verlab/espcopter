@@ -149,15 +149,6 @@ void calibrationInt() {
 
 void mainSetup() {
 
-
-  // Set Pin Mode
-  //Serial.begin(921600);// 921600
-
-  //while (! Serial) {
-  //  delay(1);
-  //}
-
-
   analogWriteFreq(20000);
   pinMode(12, OUTPUT);
   pinMode(13, OUTPUT);
@@ -190,7 +181,6 @@ void mainSetup() {
   ////// Initialize the PWM
 
   // Initial duty -> all off
-
   for (uint8_t channel = 0; channel < PWM_CHANNELS; channel++) {
     pwm_duty_init[channel] = 0;
   }

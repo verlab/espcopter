@@ -35,7 +35,7 @@ void FlightControl() {
       degree[0] = 0;
     }
 
-    if ( attitudeRadian[0] >  0.6  || attitudeRadian[0] <  -0.6 ||   attitudeRadian[1] > 0.6 ||  attitudeRadian[1] < -0.6  ) {
+    /*if ( attitudeRadian[0] >  0.6  || attitudeRadian[0] <  -0.6 ||   attitudeRadian[1] > 0.6 ||  attitudeRadian[1] < -0.6  ) {
       stopFlightHand++;
     } else {
       stopFlightHand = 0;
@@ -44,7 +44,7 @@ void FlightControl() {
 
     if ( stopFlightHand > 50) {
       stopFlightControl = 0;
-    }
+    }*/
 
 
 //#ifdef vl53l0x
@@ -68,9 +68,6 @@ void FlightControl() {
       fly();
     }*/
 
-
-
-
     if (throttle > 2) {
       roll.compute( 0 , SetPoint[0], throttle, Trim_Roll + Trim_Roll_Bs, -attitude[1], rate[1]); // Trim_Roll xOpt.output
       pitch.compute( 1 , SetPoint[1], throttle, Trim_Pitch +  Trim_Pitch_Bs, -attitude[0], -rate[0]);
@@ -89,7 +86,7 @@ void FlightControl() {
     throttle = 0;
   }
 
-  factor = 1  +  throttle / 85; //82 //+pow(2,throttle/225);// 1 + pow(2,throttle/225);
+  factor = 1  +  throttle / 85.0; //82 //+pow(2,throttle/225);// 1 + pow(2,throttle/225);
   factor_ = 100;
   motorFL = throttle + (roll.output / factor_) * factor - (pitch.output / factor_) * factor + (yaw.output / factor_) * factor ; //+ (xOpt.GetItermRateBase()/25);// + (yOpt.GetItermRateBase()/25); // pitch
   motorFR = throttle - (roll.output / factor_) * factor - (pitch.output / factor_) * factor - (yaw.output / factor_) * factor ; //- (xOpt.GetItermRateBase()/25)+100;// + (yOpt.GetItermRateBase()/25); //rool

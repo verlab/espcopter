@@ -91,7 +91,7 @@ void mag_calibration_update();
 char mbuf [200]; /* ROS Debug messages */
 
 /* Timer */
-double timer_ros, log_timer_ros, rate_ros = 50, timer_freq = 0, loop_freq = 0, control_loop = 0;
+double timer_ros, log_timer_ros, rate_ros = 50, timer_freq = 0, last_loop_freq = 0, loop_freq = 0, control_loop = 0;
 
 /*********************************************************
  * ARDUINO SETUP FUNCTION
@@ -161,13 +161,12 @@ void setup() {
   nh.loginfo(mbuf);
   sprintf(mbuf, "\33[93m[%s][Calibration] MeanGyro: [%ld, %ld, %ld]\33[0m", drone_name.c_str(), ahrs.MEAN_GYRO[0], ahrs.MEAN_GYRO[1], ahrs.MEAN_GYRO[2]);
   nh.loginfo(mbuf);
-  /*
-  Trim_Roll = -125; // -1750, 1750
-  Trim_Pitch = 250; // -1750, 1750
-  Trim_Yaw = 250;  // -1750, 1750
-  */
-
-  delay(1000);
+  
+  //Trim_Roll = -125; // -1750, 1750
+  //Trim_Pitch = 250; // -1750, 1750
+  //Trim_Yaw = 250;  // -1750, 1750
+  
+  delay(200);
 }
 /*********************************************************/
 
@@ -177,17 +176,16 @@ void setup() {
  * ARDUINO LOOP FUNCTION
 *********************************************************/
 void loop() {
-  timer_freq = millis();
+  
   /* ROS INFOS */
   if ((millis() - log_timer_ros) > 5000 && !gyro_calibration_status && !mag_calibration_status) {
     log_timer_ros = millis();
-    sprintf(mbuf, "\33[96m[%s] Conected at time: %d, loop_freq: %f, battery: %f\33[0m", drone_name.c_str(), millis(), loop_freq, (float)analogRead(A0) * 5.5);
+    sprintf(mbuf, "\33[96m[%s] Conected at time: %d, loop_freq: %f, battery: %f\33[0m", drone_name.c_str(), millis(), last_loop_freq, (float)analogRead(A0) * 5.5);
     nh.loginfo(mbuf);
-    sprintf(mbuf, "\33[96m[%s] ArmControl: %d, landingoff: %d, stopFlightControl: %d\33[0m", drone_name.c_str(), armControl, landingOff, stopFlightControl);
-    nh.loginfo(mbuf);
-    sprintf(mbuf, "\33[96m[%s] throttle: %f, motorFL: %f, motorFR: %f, motorRL: %f, motorRR: %f\33[0m", drone_name.c_str(), throttle, motorFL, motorFR, motorRL, motorRR);
-    nh.loginfo(mbuf);
-    
+    //sprintf(mbuf, "\33[96m[%s] Roll: %f, Pitch: %f, Yaw: %f\33[0m", drone_name.c_str(), roll.output, pitch.output, yaw.output);
+    //nh.loginfo(mbuf);
+    //sprintf(mbuf, "\33[96m[%s] throttle: %f, motorFL: %f, motorFR: %f, motorRL: %f, motorRR: %f\33[0m", drone_name.c_str(), throttle, motorFL, motorFR, motorRL, motorRR);
+    //nh.loginfo(mbuf);
   }
 
   /* ROS Loop */
@@ -204,20 +202,20 @@ void loop() {
       pwm_set_duty((pwmMotorRR_), 2);
       pwm_set_duty((pwmMotorRL_), 1);
       pwm_start();
-
   }else{
-    //mainLoop();
-    //modeControl();
     if (!gyro_calibration_status && !mag_calibration_status){
       FlightControl(); 
     }
-      
-
+  }
+  
+  if (millis() - timer_freq < 1000){
+    loop_freq++;
+  } else{
+    last_loop_freq = loop_freq;
+    loop_freq = 0;
+    timer_freq = millis();
   }
     
-    
-    loop_freq = 1000.0/(millis() - timer_freq);
-    timer_freq = millis();
 }
 /*********************************************************/
 
@@ -229,7 +227,7 @@ void led_callback(const std_msgs::ColorRGBA& msg) {
   analogWrite(redLed, (int)msg.r);
   analogWrite(greenLed, (int)msg.g);
   analogWrite(blueLed, (int)msg.b);
-  sprintf(mbuf, "\33[96m[Drone-1] Turning the leds on RGB(%d, %d, %d)...\33[0m", (int)msg.r, (int)msg.g, (int)msg.b);
+  sprintf(mbuf, "\33[96m[%s] Turning the leds on RGB(%d, %d, %d)...\33[0m", drone_name.c_str(), (int)msg.r, (int)msg.g, (int)msg.b);
   nh.loginfo(mbuf);
 }
 /*********************************************************/
@@ -243,22 +241,30 @@ void arm_motors_callback(const std_srvs::Trigger::Request& req, std_srvs::Trigge
   armControl = !armControl;
   analogWriteFreq(20000);
   if (armControl == 1){
-    sprintf(mbuf, "\33[91m[Drone-1] Be careful! Motors are enabled!\33[0m");
-//    for (int i = 0; i < 12; i++) {
-//      analogWrite(14, i * 10);
-//      analogWrite(15, i * 10);
-//      analogWrite(12, i * 10);
-//      analogWrite(13, i * 10);
-//      delay(25);
-//    }
-//    analogWrite(14, 0);
-//    analogWrite(15, 0);
-//    analogWrite(12, 0);
-//    analogWrite(13, 0);
+    sprintf(mbuf, "\33[91m[%s] Be careful! Motors are enabled!\33[0m", drone_name.c_str());
+    for (int i = 0; i < 50; i+=2) {
+      pwm_set_duty((i), 0);
+      pwm_set_duty((i), 3);
+      pwm_set_duty((i), 2);
+      pwm_set_duty((i), 1);
+      pwm_start();
+      delay(25);
+    }
+    /*for (int i = 0; i < 12; i++) {
+      analogWrite(14, i * 10);
+      analogWrite(15, i * 10);
+      analogWrite(12, i * 10);
+      analogWrite(13, i * 10);
+      delay(25);
+    }
+    analogWrite(14, 0);
+    analogWrite(15, 0);
+    analogWrite(12, 0);
+    analogWrite(13, 0);*/
   } else {
     enable_motors_only = false;
     throttle = 0;
-    sprintf(mbuf, "\33[92m[Drone-1] Motors are disabled!\33[0m");
+    sprintf(mbuf, "\33[92m[%s] Motors are disabled!\33[0m", drone_name.c_str());
   }  
   analogWriteFreq(20000);
   nh.loginfo(mbuf);
@@ -272,12 +278,12 @@ void arm_motors_callback(const std_srvs::Trigger::Request& req, std_srvs::Trigge
 *********************************************************/
 void motors_callback(const mavros_msgs::RCOut& msg){
   if (!armControl){
-    sprintf(mbuf, "\33[93m[Drone-1] Motors are disarmed!\33[0m");
+    sprintf(mbuf, "\33[93m[%s] Motors are disarmed!\33[0m", drone_name.c_str());
     nh.loginfo(mbuf);
     enable_motors_only = false;
     return;
   } 
-  sprintf(mbuf, "\33[93m[Drone-1] Settings motors to: %d, %d, %d, %d \33[0m",msg.channels[0], msg.channels[1], msg.channels[2], msg.channels[3]);
+  sprintf(mbuf, "\33[93m[%s] Settings motors to: %d, %d, %d, %d \33[0m", drone_name.c_str(), msg.channels[0], msg.channels[1], msg.channels[2], msg.channels[3]);
   nh.loginfo(mbuf);
   
   pwmMotorFL_ = round(map(msg.channels[0], 0, 1023, 0, PWM_PERIOD)); //255
@@ -311,9 +317,9 @@ void attitude_callback(const mavros_msgs::AttitudeTarget& msg){
   } else if (throttle <= 0) {
     throttle = 0;
   }
-  SetPoint[0] = map(msg.body_rate.x, -100, 100, -ROLL_LIMIT, ROLL_LIMIT);
-  SetPoint[1] = map(msg.body_rate.y, -100, 100, -PITCH_LIMIT, PITCH_LIMIT);
-  SetPoint[2] = map(msg.body_rate.z, -100, 100, -YAW_LIMIT, YAW_LIMIT);
+  SetPoint[0] = map((int)msg.body_rate.x, -100, 100, -ROLL_LIMIT, ROLL_LIMIT);
+  SetPoint[1] = map((int)msg.body_rate.y, -100, 100, -PITCH_LIMIT, PITCH_LIMIT);
+  SetPoint[2] = map((int)msg.body_rate.z, -100, 100, -YAW_LIMIT, YAW_LIMIT);
 }
 /*********************************************************/
 
@@ -393,7 +399,6 @@ void gyro_calibration_update() {
 
 
 
-
 /*********************************************************
  * MAGNETOMETER CALIBRATION SERVICE
 *********************************************************/
@@ -421,8 +426,11 @@ void mag_calibration_update(){
     print_once_mag = true;
     print_once_mag_l1 = true;
     print_once_mag_l2 = true;
-    ahrs.magOffsetMotorCount = 0;
-    ahrs.magOffsetMotorCount2 = 0;
+    ahrs.magOffsetMotorCount = 0.0;
+    ahrs.magOffsetMotorCount2 = 0.0;
+    ahrs.magOffsetMotor[0] = 0;
+    ahrs.magOffsetMotor[1] = 0;
+    ahrs.magOffsetMotor[0] = 0;
   } else if (tnow < 3000) {  
     if (print_once_mag){
       print_once_mag = false;
@@ -494,33 +502,39 @@ void mag_calibration_update(){
         }
         print_once_mag_l1 = false;
       }
-  } else if (tnow > 33000 && tnow < 34000) {
+  } else if (tnow > 33000 && tnow < 33800) {
       if (print_once_mag_l2){
         analogWriteFreq(20000);
-        for (int i = 0; i < 30; i++) {
-          analogWrite(14, i * 10);
-          analogWrite(15, i * 10);
-          analogWrite(12, i * 10);
-          analogWrite(13, i * 10);
-          delay(25);
+        for (int i = 0; i < 75; i++) {
+          pwm_set_duty((i), 0);
+          pwm_set_duty((i), 3);
+          pwm_set_duty((i), 2);
+          pwm_set_duty((i), 1);
+          pwm_start();
+          delay(5);
         }
         print_once_mag_l2 = false;
       }
-      analogWrite(14, 700);
-      analogWrite(15, 700);
-      analogWrite(12, 700);
-      analogWrite(13, 700);
-      ahrs.headingMag(rateFake, attitudeFake, ahrs.degree , 0.0);
+      pwm_set_duty((200), 0);
+      pwm_set_duty((200), 3);
+      pwm_set_duty((200), 2);
+      pwm_set_duty((200), 1);
+      pwm_start();
+      ahrs.headingMag(rateFake, attitudeFake, ahrs.degree, 0.0);
       if (ahrs.degree_[0] != ahrs.degree[0] && ahrs.degree_[1] != ahrs.degree[1] ) {
         ahrs.magOffsetMotorCount2 += 1.0;
         ahrs.degree_[1] = ahrs.degree[1]; // try with the sum
         ahrs.degree_[2] = ahrs.degree[2];
       }
-  } else if (tnow > 34000) {
-      analogWrite(14, 0);
-      analogWrite(15, 0);
-      analogWrite(12, 0);
-      analogWrite(13, 0);
+  } else if (tnow > 33800) {
+      for (int i = 0; i < 10; i++) {
+        pwm_set_duty((0), 0);
+        pwm_set_duty((0), 3);
+        pwm_set_duty((0), 2);
+        pwm_set_duty((0), 1);
+        pwm_start();
+        delay(25);
+      }
 
       ahrs.sumMagOffsetMotor2[0] = ahrs.degree[1];
       ahrs.sumMagOffsetMotor2[1] = ahrs.degree[2];
