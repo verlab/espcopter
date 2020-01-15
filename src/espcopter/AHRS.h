@@ -14,10 +14,7 @@ class AHRS {
     void I2Cread(uint8_t Address, uint8_t Register, uint8_t Nbytes, uint8_t* Data);
     void compute(float attitude[3], float rate[3] , float attitudeRadian[3] , float rateRadian[3]);
     void normalize(float output[3], int16_t input[3]);
-    void calibration();
-    void loadParameter();
     void setZero();
-    String showParameter();
     void headingMag(float attitude_rate[3], float  input[3], float degree[4], float throttle );
     int32_t SUM_GYRO[3] = {0}, MEAN_GYRO[3] = {0};
     int16_t accel[3] = {0}, gyro_int[3] = {0} , mag[3] = {0}, mag_int[3] = {0};
@@ -27,8 +24,6 @@ class AHRS {
     uint8_t Mscale = MFS_16BITS; // Choose either 14-bit or 16-bit magnetometer resolution
     uint8_t Gscale = GFS_250DPS;
     uint8_t Ascale = AFS_2G;
-
-
 
     uint8_t Mmode = 0x06;        // 2 for 8 Hz, 6 for 100 Hz continuous magnetometer data read
     
@@ -57,6 +52,7 @@ class AHRS {
     int16_t magOffsetMotorFnl2[3] = {0};
 
     int16_t magOffsetMotorEpr[2] = {0};
+    float accel_angle[3] = {0}, angle_acc[3] = {0};
 
     float gyro[3] = {0}, degree[3] = {0};
 
@@ -64,8 +60,6 @@ class AHRS {
     float destination2[3] = {1, 1, 1};
 
   private:
-    void gyroCorrection(uint16_t itinary);
-    void magCorrection(uint16_t itinary);
     
     int16_t Filter_P[3] = {0}, Filter_I[3] = {0}, Filter_SUM[3] = {0}, delta = 0, _angle[3] = {0};
     float _rate[3] = {0}, test = 0, rate[3] = {0};
@@ -73,7 +67,7 @@ class AHRS {
     float dt = 0, timeprev = 0, timenow = 0;
     int i, j = 0;
     
-    float accel_angle[3] = {0}, angle_acc[3] = {0};
+
     
     float gyro_angle_x, gyro_angle_y, gyro_angle_z; // Estimated Gravity Vector
     int16_t norm = 0;

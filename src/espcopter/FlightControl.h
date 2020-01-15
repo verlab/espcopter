@@ -25,69 +25,32 @@ void FlightControl() {
     }
   }
 
-  if ((millis() - ts) > 25) { //Update only once per 2ms (500hz update rate)
+  if ((millis() - ts) > 2) { //Update only once per 2ms (500hz update rate)
     ts = millis();
     ahrs.compute(attitude, rate, attitudeRadian, rateRadian);
 
     ahrs.headingMag(rateRadian, attitudeRadian, degree , throttle);
 
-    if ( yawControl == 0) {
-      degree[0] = 0;
-    }
-
-    /*if ( attitudeRadian[0] >  0.6  || attitudeRadian[0] <  -0.6 ||   attitudeRadian[1] > 0.6 ||  attitudeRadian[1] < -0.6  ) {
-      stopFlightHand++;
-    } else {
-      stopFlightHand = 0;
-      stopFlightControl = 1;
-    }
-
-    if ( stopFlightHand > 50) {
-      stopFlightControl = 0;
-    }*/
-
-
-//#ifdef vl53l0x
-    //if (vl5310xControl == 1) {
-    //  vl5310x();
+    //yawControl = 0;
+    //if ( yawControl == 0) {
+    //  degree[0] = 0;
     //}
-//#endif
-
-
-
-/*#ifdef BLOCKLY
-    blockly.blocklyLoop();
-    SetPointOpt[0] = blockly.GetOptRoll();
-    SetPointOpt[1] = blockly.GetOptPitch();
-    SetPointOptMain[0] = blockly.GetRoll();
-    SetPointOptMain[1] = blockly.GetPitch();
-    yaw_Control = blockly.GetTurn();
-#endif*/
-
-    /*if (opticalFlowControl == 1) {
-      fly();
-    }*/
 
     if (throttle > 2) {
       roll.compute( 0 , SetPoint[0], throttle, Trim_Roll + Trim_Roll_Bs, -attitude[1], rate[1]); // Trim_Roll xOpt.output
       pitch.compute( 1 , SetPoint[1], throttle, Trim_Pitch +  Trim_Pitch_Bs, -attitude[0], -rate[0]);
-      yaw.compute( 2 , SetPoint[2], throttle, Trim_Yaw, (degree[0] + yaw_Control) * 100, -rate[2]); //-rate[2]degree[0]*100
-//      roll.compute( 0 , SetPoint[0] + SetPointOptMain[0], throttle, -xGOT.output - xOpt.output + Trim_Roll + Trim_Roll_Bs - xMulti.output + xMultiM.output  , -attitude[1], rate[1]); // Trim_Roll xOpt.output
-//      pitch.compute( 1 , SetPoint[1] + SetPointOptMain[1] , throttle, -yGOT.output - yOpt.output +  Trim_Pitch +  Trim_Pitch_Bs - yMulti.output  + yMultiM.output  , -attitude[0], -rate[0]);
-//      yaw.compute( 2 , SetPoint[2] , throttle, Trim_Yaw, (degree[0] + yaw_Control) * 100, -rate[2]); //-rate[2]degree[0]*100
+      yaw.compute( 2 , SetPoint[2], throttle, Trim_Yaw, (degree[0]) * 100, -rate[2]); //-rate[2]degree[0]*100
+      // roll.compute( 0 , SetPoint[0] + SetPointOptMain[0], throttle, -xGOT.output - xOpt.output + Trim_Roll + Trim_Roll_Bs - xMulti.output + xMultiM.output  , -attitude[1], rate[1]); // Trim_Roll xOpt.output
+      // pitch.compute( 1 , SetPoint[1] + SetPointOptMain[1] , throttle, -yGOT.output - yOpt.output +  Trim_Pitch +  Trim_Pitch_Bs - yMulti.output  + yMultiM.output  , -attitude[0], -rate[0]);
+      // yaw.compute( 2 , SetPoint[2] , throttle, Trim_Yaw, (degree[0] + yaw_Control) * 100, -rate[2]); //-rate[2]degree[0]*100
     } else {
       ahrs.setZero();
     }
   }
 
-  if (throttle >= motorMax) {
-    throttle = motorMax;
-  } else if (throttle <= 0) {
-    throttle = 0;
-  }
-
   factor = 1  +  throttle / 85.0; //82 //+pow(2,throttle/225);// 1 + pow(2,throttle/225);
   factor_ = 100;
+  
   motorFL = throttle + (roll.output / factor_) * factor - (pitch.output / factor_) * factor + (yaw.output / factor_) * factor ; //+ (xOpt.GetItermRateBase()/25);// + (yOpt.GetItermRateBase()/25); // pitch
   motorFR = throttle - (roll.output / factor_) * factor - (pitch.output / factor_) * factor - (yaw.output / factor_) * factor ; //- (xOpt.GetItermRateBase()/25)+100;// + (yOpt.GetItermRateBase()/25); //rool
   motorRL = throttle + (roll.output / factor_) * factor + (pitch.output / factor_) * factor - (yaw.output / factor_) * factor ; //+ (xOpt.GetItermRateBase()/25);// - (yOpt.GetItermRateBase()/25); // pitch
@@ -337,15 +300,7 @@ int getRX_yaw() {
   return round(RX_yaw);
 }
 
-//void setVl5310xControl(boolean x) {
-//  if ( x == true) {
-//    vl5310xControl = 1;
-//  } else {
-//    vl5310xControl = 0;
-//  }
-//}
-//
-//
+
 //void setTargetOto(int x) {
 //  targetOto = x;
 //}
@@ -357,28 +312,16 @@ int getRX_yaw() {
 
 /*void SetOptPoint_X(int x) {
   SetPointOpt[0] = x;
-}
-void SetOptPoint_Y(int x) {
+  }
+  void SetOptPoint_Y(int x) {
   SetPointOpt[1] = x;
-}
+  }
 
-int getOptData_X() {
+  int getOptData_X() {
   return deltaCalX;
-}
+  }
 
-int getOptData_Y() {
+  int getOptData_Y() {
   return deltaCalY;
-}
+  }
 */
-//int Distance_Y_1() {
-//  return DistanceY1;
-//}
-//int Distance_Y_0() {
-//  return DistanceY0;
-//}
-//int Distance_X_1() {
-//  return DistanceX1;
-//}
-//int Distance_X_0() {
-//  return DistanceX0;
-//}

@@ -160,24 +160,6 @@ void mainSetup() {
   digitalWrite(14, LOW);
   digitalWrite(15, LOW);
 
-//  pinMode(D1, OUTPUT);
-//  pinMode(D2, OUTPUT);
-//  pinMode(D3, OUTPUT);
-//  pinMode(D4, OUTPUT);
-//  pinMode(D5, OUTPUT);
-//  pinMode(D6, OUTPUT);
-//  pinMode(D7, OUTPUT);
-//  pinMode(D8, OUTPUT);
-//
-//  digitalWrite(D1, LOW);
-//  digitalWrite(D2, LOW);
-//  digitalWrite(D3, LOW);
-//  digitalWrite(D4, LOW);
-//  digitalWrite(D5, LOW);
-//  digitalWrite(D6, LOW);
-//  digitalWrite(D7, LOW);
-//  digitalWrite(D8, LOW);
-
   ////// Initialize the PWM
 
   // Initial duty -> all off
@@ -241,10 +223,12 @@ void mainSetup() {
 
   //setupWiFi();
 
-  roll.SetGain(7.2, 26.0, 0.16, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
+  //roll.SetGain(7.2, 26.0, 0.16, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
+  roll.SetGain(3.2, 13.0, 0.10, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
   roll.SetLimit(4500, 200, 3500);
 
-  pitch.SetGain(7.2, 26.0, 0.16, 0.6, 0.9);
+  //pitch.SetGain(7.2, 26.0, 0.16, 0.6, 0.9);
+  pitch.SetGain(3.2, 13.0, 0.10, 0.6, 0.9);
   pitch.SetLimit(4500, 200, 3500);
 
   yaw.SetGain(0.8, 0.3, 0.5, 0.9, 0.0); // (0.8,0.3,0.5,0.9,0.0);
