@@ -21,7 +21,6 @@ void FlightControl() {
       batteryCount = 0;
     }
     if (batteryCount > 25) {
-      //landingOff = 0;
     }
   }
 
@@ -30,11 +29,6 @@ void FlightControl() {
     ahrs.compute(attitude, rate, attitudeRadian, rateRadian);
 
     ahrs.headingMag(rateRadian, attitudeRadian, degree , throttle);
-
-    //yawControl = 0;
-    //if ( yawControl == 0) {
-    //  degree[0] = 0;
-    //}
 
     if (throttle > 2) {
       roll.compute( 0 , SetPoint[0], throttle, Trim_Roll + Trim_Roll_Bs, -attitude[1], rate[1]); // Trim_Roll xOpt.output

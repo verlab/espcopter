@@ -118,32 +118,6 @@ void scanShields() {
 
 }
 
-void calibrationInt() {
-  while (calTest == 1 ) {
-    unsigned long calMillis = millis();
-    if (takeTimeCal = 0) {
-      calMillisPre = calMillis;
-      takeTimeCal = 1;
-    }
-    Serial.println(calMillis);
-    EEPROM.write(0, 1);
-    EEPROM.commit();
-    analogWrite(redLed, 0);
-    delay(50);
-    analogWrite(redLed, PWMRANGE);
-    delay(50);
-    if (calMillis - calMillisPre > 2500) {
-      analogWrite(redLed, PWMRANGE);
-      analogWrite(greenLed, 0);
-      analogWrite(blueLed, 0); // Blue opened
-      EEPROM.write(0, 0);
-      EEPROM.commit();
-      calTest = 0;
-      break;
-    }
-  }
-
-}
 
 
 
@@ -186,10 +160,7 @@ void mainSetup() {
   EEPROM.begin(512);
   scanShields();
 
-  calAHRS = EEPROM.read(0);
-  Serial.print("[DRONE] Calibration? ");
-  Serial.println(calAHRS);
-  ahrs.Initialize(calAHRS);
+  ahrs.Initialize();
 
   if (Trim_DF == 1) {
     EEPROM.write(60, highByte(Trim_Roll_DF));
@@ -211,28 +182,17 @@ void mainSetup() {
 
   yaw.SetItermRate(Trim_Yaw_Bs);
 
-  Serial.print("Trim_Roll_Bs: ");
-  Serial.print(Trim_Roll_Bs);
-  Serial.print(" Trim_Pitch_Bs: ");
-  Serial.print(Trim_Pitch_Bs);
-  Serial.print(" Trim_Yaw_Bs: ");
-  Serial.print(Trim_Yaw_Bs);
-  Serial.println(" done Trim_Bs");
-
-  //calibrationInt();
-
-  //setupWiFi();
-
-  //roll.SetGain(7.2, 26.0, 0.16, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
-  roll.SetGain(3.2, 13.0, 0.10, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
+  roll.SetGain(7.2, 26.0, 0.16, 0.6, 0.9); // roll.SetGain(7.2, 26.0, 0.16,0.6,0.9);
   roll.SetLimit(4500, 200, 3500);
 
-  //pitch.SetGain(7.2, 26.0, 0.16, 0.6, 0.9);
-  pitch.SetGain(3.2, 13.0, 0.10, 0.6, 0.9);
+  pitch.SetGain(7.2, 26.0, 0.16, 0.6, 0.9);
   pitch.SetLimit(4500, 200, 3500);
 
   yaw.SetGain(0.8, 0.3, 0.5, 0.9, 0.0); // (0.8,0.3,0.5,0.9,0.0);
   yaw.SetLimit(4500, 1000, 6000);
+
+
+  
 
   oto.SetGain(0.0, 0.0, 1.8, 1.5, 750.0); // 1.8,3.5,1000.0);
   oto.SetLimit(1000, 1000, 6500);

@@ -6,7 +6,7 @@
 class AHRS {
   public:
 
-    void Initialize(int calAHRS);
+    void Initialize();
     float rad2deg(float rad);
     float deg2rad(float deg);
     int16_t readTemp();
@@ -32,7 +32,6 @@ class AHRS {
     float magCaCoefficient;
     float throttle;
     float magDegree[4] = {0};
-    float minX, maxX, minY, maxY;
     int calAHRS;
     float headingDegreesDefoult = 0;
 
@@ -67,14 +66,10 @@ class AHRS {
     float dt = 0, timeprev = 0, timenow = 0;
     int i, j = 0;
     
-
-    
     float gyro_angle_x, gyro_angle_y, gyro_angle_z; // Estimated Gravity Vector
     int16_t norm = 0;
     double attitude[3] = {0}, _attitude[3]  = {0};
     uint8_t ST1;
-    
-
 
     float avg_delta, scale_x, scale_y;
 
@@ -98,11 +93,6 @@ class AHRS {
       MFS_14BITS = 0, // 0.6 mG per LSB
       MFS_16BITS      // 0.15 mG per LSB
     };
-
-
-
-
-
 
     float previousHeadingDegrees = 0;
     float  headingDegrees = 0;

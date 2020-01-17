@@ -15,8 +15,6 @@
 #define    ACC_FULL_SCALE_8_G        0x10
 #define    ACC_FULL_SCALE_16_G       0x18
 
-
-
 #define GYRO_RANGE 0x18                // GYRO Range : -2000DPS  ~ 2000DPS 
 #define ACCEL_RANGE 0x00                // ACCEL Range : -2g ~ 2g
 #define MPU6050_DLPF 0x02               // DLP : 98mHz

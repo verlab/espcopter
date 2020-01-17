@@ -4,6 +4,8 @@
  *     Created by Paulo Rezeck                           * 
  *     Computer Vision and Robotics Laboratory (VeRLab)  *
  *     December 12, 2019                                 *
+ *                                                       *
+ *     Adapted from original ESPCopter firware           *
  *********************************************************/
 
 

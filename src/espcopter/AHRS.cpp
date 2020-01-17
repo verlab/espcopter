@@ -4,7 +4,7 @@
 int previousDegree;
 float angle = 0;
 float heading = 0;
-void AHRS::Initialize(int calAHRS)
+void AHRS::Initialize()
 {
   // Start I2C Communication
   //Wire.begin();

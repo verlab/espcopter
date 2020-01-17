@@ -28,20 +28,20 @@ int16_t Trim_Yaw_Bs = 0;
 //Define modules
 
 //#define NeoPixel
-#define bme280
+//#define bme280
 
-#define MULTI_RANGER// auto recognazation 
-#define HandControl // 
+//#define MULTI_RANGER// auto recognazation 
+//#define HandControl // 
 //#define AntiCollision // 
 
-#define vl53l0x // auto recognazation 
+//#define vl53l0x // auto recognazation 
 
 ///#define LONG_RANGE 
-#define SHORT_RANGE 
+//#define SHORT_RANGE 
 //#define HIGH_ACCURACY 
 //#define HIGH_SPEED
 
-#define opticalFlow // auto recognazation 
+//#define opticalFlow // auto recognazation 
 //#define AUTOFLY
 //#define  otoMission
 
