@@ -140,6 +140,9 @@ $ rosservice call /drone_1/mag_calibration "{}"
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/AO48jBouAZw/0.jpg)](https://www.youtube.com/watch?v=AO48jBouAZw)
 
 
+## Maintainer
+- [Paulo Rezeck](https://github.com/rezeck)
+
 ## More detail about ESPCopter
 Espcopter it is a small size mini-drone that is a wirelessly networkable, interactive and programmable drone.
 - [Access here](https://espcopter.com/)
